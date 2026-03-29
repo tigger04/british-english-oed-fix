@@ -5,10 +5,13 @@
 BINARY := sanitize
 BUILD_DIR := .
 GO := go
-VERSION ?= 0.1.0
+REPO := tigger04/british-english-oed-fix
+TAP_REPO := tigger04/homebrew-tap
+CURRENT_VERSION := $(shell cat VERSION | tr -d '[:space:]')
+VERSION ?= $(CURRENT_VERSION)
 LDFLAGS := -ldflags "-X main.version=$(VERSION)"
 
-.PHONY: build test test-one-off install clean release
+.PHONY: build test test-one-off install clean release sync
 
 build:
 	$(GO) build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY) ./cmd/sanitize/
@@ -25,13 +28,30 @@ else
 endif
 
 install: build
+	@mkdir -p ~/bin
 	cp $(BUILD_DIR)/$(BINARY) ~/bin/$(BINARY)
+	@echo "Installed $(BINARY) $(VERSION) to ~/bin/$(BINARY)"
 
 clean:
 	rm -f $(BUILD_DIR)/$(BINARY)
 
+# Release workflow:
+#   make release                    — increment minor version (0.1.0 → 0.2.0)
+#   make release VERSION=1.0.0     — set explicit version
+#   SKIP_TESTS=1 make release      — skip regression tests
+release:
+ifndef SKIP_TESTS
+	@echo "Running regression tests..."
+	$(MAKE) test
+endif
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		echo "Error: working tree is dirty. Commit or stash changes first."; \
+		exit 1; \
+	fi
+	@./scripts/release.sh "$(VERSION)" "$(CURRENT_VERSION)" "$(REPO)" "$(TAP_REPO)" "$(BINARY)"
+
 sync:
 	git add --all
-	git commit -m "chore: sync"
-	git pull
+	git commit -m "chore: sync" || true
+	git pull --rebase
 	git push
