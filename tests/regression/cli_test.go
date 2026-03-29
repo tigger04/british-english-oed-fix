@@ -193,3 +193,127 @@ func TestCLI_SymbolsQuietFlag_StderrEmpty_RT029(t *testing.T) {
 		t.Errorf("expected empty stderr with -q, got %q", stderr.String())
 	}
 }
+
+// RT-030: no subcommand exits non-zero with usage on stderr
+func TestCLI_NoSubcommand_ExitsNonZeroWithUsage_RT030(t *testing.T) {
+	bin := binaryPath(t)
+
+	cmd := exec.Command(bin)
+	cmd.Stdin = strings.NewReader("")
+
+	var stderr strings.Builder
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err == nil {
+		t.Fatal("expected non-zero exit, got success")
+	}
+
+	if !strings.Contains(stderr.String(), "usage") {
+		t.Errorf("expected usage in stderr, got %q", stderr.String())
+	}
+}
+
+// RT-031: oed symbols and symbols oed produce identical output
+func TestCLI_SubcommandOrder_Irrelevant_RT031(t *testing.T) {
+	bin := binaryPath(t)
+
+	input := "I need to organise the center\u2014it\u2019s important\u2026"
+
+	cmd1 := exec.Command(bin, "oed", "symbols", "-q")
+	cmd1.Stdin = strings.NewReader(input)
+	out1, err := cmd1.Output()
+	if err != nil {
+		t.Fatalf("oed symbols failed: %v", err)
+	}
+
+	cmd2 := exec.Command(bin, "symbols", "oed", "-q")
+	cmd2.Stdin = strings.NewReader(input)
+	out2, err := cmd2.Output()
+	if err != nil {
+		t.Fatalf("symbols oed failed: %v", err)
+	}
+
+	if string(out1) != string(out2) {
+		t.Errorf("outputs differ:\n  oed symbols: %q\n  symbols oed: %q", string(out1), string(out2))
+	}
+}
+
+// RT-032: duplicate subcommand deduplication
+func TestCLI_DuplicateSubcommand_Deduplicated_RT032(t *testing.T) {
+	bin := binaryPath(t)
+
+	cmd := exec.Command(bin, "oed", "oed", "-q")
+	cmd.Stdin = strings.NewReader("organise")
+	out, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("command failed: %v", err)
+	}
+
+	got := strings.TrimRight(string(out), "\n")
+	if got != "organize" {
+		t.Errorf("got %q, want %q", got, "organize")
+	}
+}
+
+// RT-033: unknown argument exits non-zero
+func TestCLI_UnknownArg_ExitsNonZero_RT033(t *testing.T) {
+	bin := binaryPath(t)
+
+	cmd := exec.Command(bin, "foo")
+	cmd.Stdin = strings.NewReader("")
+
+	var stderr strings.Builder
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err == nil {
+		t.Fatal("expected non-zero exit, got success")
+	}
+
+	if stderr.String() == "" {
+		t.Error("expected error message on stderr, got empty")
+	}
+}
+
+// RT-034: -h exits 0 with usage
+func TestCLI_HelpFlag_ExitsZeroWithUsage_RT034(t *testing.T) {
+	bin := binaryPath(t)
+
+	cmd := exec.Command(bin, "-h")
+
+	var stdout, stderr strings.Builder
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		t.Fatalf("expected exit 0, got error: %v", err)
+	}
+
+	combined := stdout.String() + stderr.String()
+	if !strings.Contains(combined, "usage") && !strings.Contains(combined, "Usage") {
+		t.Errorf("expected usage text, got stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+}
+
+// RT-035: --version exits 0 with version string
+func TestCLI_VersionFlag_ExitsZeroWithVersion_RT035(t *testing.T) {
+	bin := binaryPath(t)
+
+	cmd := exec.Command(bin, "--version")
+
+	var stdout, stderr strings.Builder
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		t.Fatalf("expected exit 0, got error: %v", err)
+	}
+
+	combined := stdout.String() + stderr.String()
+	if !strings.Contains(combined, "sanitize") {
+		t.Errorf("expected version string containing 'sanitize', got stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+}

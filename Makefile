@@ -5,11 +5,13 @@
 BINARY := sanitize
 BUILD_DIR := .
 GO := go
+VERSION ?= 0.1.0
+LDFLAGS := -ldflags "-X main.version=$(VERSION)"
 
 .PHONY: build test test-one-off install clean release
 
 build:
-	$(GO) build -o $(BUILD_DIR)/$(BINARY) ./cmd/sanitize/
+	$(GO) build $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY) ./cmd/sanitize/
 
 test: build
 	$(GO) test ./pkg/spelling/ -v

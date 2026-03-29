@@ -48,23 +48,24 @@ func (e *OEDEngine) loadWordList(data string) error {
 
 // ProcessLine replaces words in a single line, preserving case.
 func (e *OEDEngine) ProcessLine(line string) string {
+	runes := []rune(line)
 	var result strings.Builder
 	result.Grow(len(line))
 
 	i := 0
-	for i < len(line) {
-		if isWordChar(rune(line[i])) {
+	for i < len(runes) {
+		if isWordChar(runes[i]) {
 			// Extract the whole word
 			j := i
-			for j < len(line) && isWordChar(rune(line[j])) {
+			for j < len(runes) && isWordChar(runes[j]) {
 				j++
 			}
-			word := line[i:j]
+			word := string(runes[i:j])
 			replaced := e.replaceWord(word)
 			result.WriteString(replaced)
 			i = j
 		} else {
-			result.WriteByte(line[i])
+			result.WriteRune(runes[i])
 			i++
 		}
 	}

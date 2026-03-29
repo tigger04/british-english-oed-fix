@@ -11,13 +11,21 @@ import (
 	"github.com/tigger04/british-english-oed-fix/pkg/spelling"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "usage: sanitize <subcommand> [flags]")
-		fmt.Fprintln(os.Stderr, "subcommands: oed, symbols")
-		os.Exit(2)
-	}
+// version is set at build time via -ldflags.
+var version = "dev"
 
+const usageText = `usage: sanitize <subcommand> [<subcommand>...] [flags]
+
+Subcommands:
+  oed       Convert US→UK and -ise→-ize spellings
+  symbols   Convert typographic characters to ASCII
+
+Flags:
+  -q          Suppress change summary on stderr
+  -h, --help  Print this help message
+  --version   Print version`
+
+func main() {
 	var doOED bool
 	var doSymbols bool
 	var quiet bool
@@ -30,6 +38,12 @@ func main() {
 			doSymbols = true
 		case "-q":
 			quiet = true
+		case "-h", "--help":
+			fmt.Println(usageText)
+			os.Exit(0)
+		case "--version":
+			fmt.Printf("sanitize %s\n", version)
+			os.Exit(0)
 		default:
 			fmt.Fprintf(os.Stderr, "unknown argument: %s\n", arg)
 			os.Exit(2)
@@ -37,8 +51,7 @@ func main() {
 	}
 
 	if !doOED && !doSymbols {
-		fmt.Fprintln(os.Stderr, "usage: sanitize <subcommand> [flags]")
-		fmt.Fprintln(os.Stderr, "subcommands: oed, symbols")
+		fmt.Fprintln(os.Stderr, usageText)
 		os.Exit(2)
 	}
 
