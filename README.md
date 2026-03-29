@@ -1,26 +1,99 @@
 # WTF: What's This For?
 
-Convert English language inputs
-- fix any spelling that appears to be be American
-- fix anything British that doesn't follow (OED)[https://en.wikipedia.org/wiki/Oxford_spelling] preferred spelling.
+A fast CLI tool that converts English text to [Oxford spelling](https://en.wikipedia.org/wiki/Oxford_spelling) (OED preferred British English with `-ize` suffixes). It also optionally sanitizes typographic symbols that cause problems in code and plain-text workflows.
 
-** i.e. fix `-ize` suffixes **
+```bash
+# Fix spellings: US → UK (OED), and non-OED British -ise → -ize
+echo "I need to organise the center" | sanitize oed
+# Output: I need to organize the centre
 
-It is not perfect or exhaustive, but I decided to write my own "fixer" because spell checkers are stupidly inconsistent, or simply unaware that OED spelling exists. And I am tired of fighting spell checkers.
+# Fix typographic symbols: smart quotes, em dashes, ellipsis, etc.
+echo 'He said "hello"…' | sanitize symbols
+# Output: He said "hello"...
 
-# This is not a spell checker!
-- It will not fix typos, misspellings or  grammar
+# Both at once (subcommands in any order)
+echo 'I need to "organise" the center…' | sanitize oed symbols
+# Output: I need to "organize" the centre...
+```
+
+## This is not a spell checker!
+
+- It will not fix typos, misspellings, or grammar
 - It will not highlight errors or suggest corrections
-- It will take an English language string, and output the same string with any American or non-OED British spelling converted to OED spelling. That is all
-- My dictionary is not exhaustive. I welcome contributions to improve it.
+- It takes an English language string on stdin, and outputs the same string with any American or non-OED British spelling converted to OED spelling. That is all
+- My dictionary is not exhaustive. I welcome contributions to improve it
 
-# WTF: Why the ... ?
+## Subcommands
+
+| Subcommand | What it does |
+|-----------|--------------|
+| `oed` | Converts US spellings to UK (center→centre) and non-OED -ise to -ize (organise→organize) |
+| `symbols` | Converts typographic characters to ASCII equivalents (smart quotes, em/en dashes, ellipsis, bullets, arrows) |
+
+Subcommands can be combined in any order. Running `sanitize` with no subcommands prints usage and exits with an error.
+
+## Flags
+
+| Flag | Effect |
+|------|--------|
+| `-q` | Quiet mode — suppresses the change summary on stderr |
+| `-h`, `--help` | Print usage |
+| `--version` | Print version |
+
+## Installation
+
+```bash
+brew tap tigger04/tap
+brew install sanitize
+```
+
+Or build from source:
+
+```bash
+git clone https://github.com/tigger04/british-english-oed-fix.git
+cd british-english-oed-fix
+make install
+```
+
+## WTF: Why the ... ?
 
 A question I get asked often:
 > Why do you mix British and American spelling?
 
 I don't. I follow Oxford spelling (`en-GB-oxendict`), which favours `-ize` endings. This is the OED standard, still preferred in technical writing, scientific papers, and by international organizations like the UN.
 
-(Oxford spelling)[https://en.wikipedia.org/wiki/Oxford_spelling] was the norm in most British newspapers until the early 2000s, when they collectively reverted to Cambridge spelling (`-ise`). The shift had more to do with asserting cultural distance from American English than with any linguistic rationale.
+[Oxford spelling](https://en.wikipedia.org/wiki/Oxford_spelling) was the norm in most British newspapers until the early 2000s, when they collectively reverted to Cambridge spelling (`-ise`). The shift had more to do with asserting cultural distance from American English than with any linguistic rationale.
 
 I speak Hiberno-English. I follow the OED because it offers the least ambiguity to the widest English-reading audience, short of switching to US English entirely - which isn't my dialect. I feel no obligation to follow the fashion of a neighbouring country that has abandoned its own dictionary's recommendation.
+
+## Project structure
+
+```
+.
+├── cmd/sanitize/main.go      # CLI entry point
+├── pkg/spelling/              # Spelling conversion logic
+├── data/
+│   ├── us-to-uk.txt           # US → UK word pairs (721 entries)
+│   └── ise-to-ize.txt         # -ise → -ize word pairs (1,213 entries)
+├── docs/
+│   ├── vision.md              # Project vision and goals
+│   ├── architecture.md        # Technical architecture
+│   ├── implementation-plan.md # Phased build plan
+│   └── testing.md             # Testing strategy
+├── tests/
+│   └── regression/            # Automated tests
+├── Makefile                   # Build, test, install, release
+└── README.md
+```
+
+## Contributing
+
+Word list contributions are welcome. The dictionaries live in `data/`:
+- `us-to-uk.txt` — US to UK spelling pairs
+- `ise-to-ize.txt` — non-OED -ise to OED -ize pairs
+
+Format: `wrong_spelling=correct_spelling`, one per line. Lines starting with `#` are comments.
+
+## Licence
+
+MIT. Copyright Tadg Paul.
