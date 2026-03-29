@@ -8,6 +8,12 @@ Convert English language inputs
 
 It is not perfect or exhaustive, but I decided to write my own "fixer" because spell checkers are stupidly inconsistent, or simply unaware that OED spelling exists. And I am tired of fighting spell checkers.
 
+# This is not a spell checker!
+- It will not fix typos, misspellings or  grammar
+- It will not highlight errors or suggest corrections
+- It will take an English language string, and output the same string with any American or non-OED British spelling converted to OED spelling. That is all
+- My dictionary is not exhaustive. I welcome contributions to improve it.
+
 # WTF: Why the ... ?
 
 A question I get asked often:
