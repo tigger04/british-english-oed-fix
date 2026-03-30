@@ -1,6 +1,7 @@
 # WTF: What's This For?
 
-A fast CLI tool that converts English text to [Oxford spelling](https://en.wikipedia.org/wiki/Oxford_spelling) (OED preferred British English with `-ize` suffixes). It also optionally sanitizes typographic symbols that cause problems in code and plain-text workflows.
+- A fast CLI tool that converts English text to [Oxford spelling](https://en.wikipedia.org/wiki/Oxford_spelling) (OED preferred British English with `-ize` suffixes).
+- Sanitizes typographic symbols that cause problems in code and plain-text workflows.
 
 ```bash
 # Fix spellings: US → UK (OED), and non-OED British -ise → -ize
@@ -20,7 +21,7 @@ echo 'I need to "organise" the center…' | sanitize oed symbols
 
 - It will not fix typos, misspellings, or grammar
 - It will not highlight errors or suggest corrections
-- It takes an English language string on stdin, and outputs the same string with any American or non-OED British spelling converted to OED spelling. That is all
+- It takes an English language string on stdin, and outputs the same string with many American or non-OED British spelling converted to OED spelling. That is all
 - My dictionary is not exhaustive. I welcome contributions to improve it
 
 ## Subcommands
