@@ -70,8 +70,8 @@ trap 'rm -rf "${TMPFILE}" "${TAP_DIR}"' EXIT
 
 gh repo clone "${TAP_REPO}" "${TAP_DIR}" -- --depth 1
 
-cat > "${TAP_DIR}/Formula/sanitize.rb" << FORMULA
-class Sanitize < Formula
+cat > "${TAP_DIR}/Formula/oed-sanitize.rb" << FORMULA
+class OedSanitize < Formula
   desc "Fast CLI tool for converting English text to Oxford (OED) spelling"
   homepage "https://github.com/${REPO}"
   url "${TARBALL_URL}"
@@ -93,8 +93,8 @@ end
 FORMULA
 
 cd "${TAP_DIR}"
-git add Formula/sanitize.rb
-git commit -m "Update sanitize formula to v${NEW_VERSION}"
+git add Formula/oed-sanitize.rb
+git commit -m "Update oed-sanitize formula to v${NEW_VERSION}"
 git push
 
 echo "Released v${NEW_VERSION}"

@@ -5,7 +5,7 @@
 BINARY := sanitize
 BUILD_DIR := .
 GO := go
-REPO := tigger04/british-english-oed-fix
+REPO := tigger04/oed-sanitize
 TAP_REPO := tigger04/homebrew-tap
 CURRENT_VERSION := $(shell cat VERSION | tr -d '[:space:]')
 VERSION ?= $(CURRENT_VERSION)

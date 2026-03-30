@@ -141,7 +141,7 @@ Suppressed with `-q` for pipeline/scripting use.
 ## Project layout
 
 ```
-british-english-oed-fix/
+oed-sanitize/
 ├── cmd/sanitize/main.go        # CLI entry point, flag parsing, subcommand dispatch
 ├── pkg/
 │   └── spelling/

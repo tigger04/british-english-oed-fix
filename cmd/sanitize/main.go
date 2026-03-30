@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tigger04/british-english-oed-fix/data"
-	"github.com/tigger04/british-english-oed-fix/pkg/spelling"
+	"github.com/tigger04/oed-sanitize/data"
+	"github.com/tigger04/oed-sanitize/pkg/spelling"
 )
 
 // version is set at build time via -ldflags.

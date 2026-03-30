@@ -50,8 +50,8 @@ brew install tigger04/tap/sanitize
 Or build from source:
 
 ```bash
-git clone https://github.com/tigger04/british-english-oed-fix.git
-cd british-english-oed-fix
+git clone https://github.com/tigger04/oed-sanitize.git
+cd oed-sanitize
 make install
 ```
 

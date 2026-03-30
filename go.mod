@@ -1,3 +1,3 @@
-module github.com/tigger04/british-english-oed-fix
+module github.com/tigger04/oed-sanitize
 
 go 1.25.0

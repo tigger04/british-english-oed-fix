@@ -1,4 +1,4 @@
-# Project: british-english-oed-fix (sanitize)
+# Project: oed-sanitize
 
 ## What this is
 
@@ -8,7 +8,7 @@ A Go CLI tool called `sanitize` that converts English text to OED (Oxford) spell
 
 - The word lists in `data/` are the single source of truth. No word pairs are hardcoded in Go source.
 - Word lists use `wrong=correct` format, one pair per line. `#` for comments.
-- The binary name is `sanitize`, not `british-english-oed-fix` (repo name differs from binary name).
+- The binary name is `sanitize`, not `oed-sanitize` (repo name differs from binary name).
 - This project was extracted from a Hammerspoon config. The hammerspoon repo (tigger04/hammerspoon) has issue #26 tracking the migration to use this binary.
 
 ## Architecture
