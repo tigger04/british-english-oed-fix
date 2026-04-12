@@ -130,7 +130,6 @@ channeled=channelled
 channeling=channelling
 checkbook=chequebook
 checkbooks=chequebooks
-checker=chequer
 checkerboard=chequerboard
 checkered=chequered
 chili=chilli
