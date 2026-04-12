@@ -1,2 +1,22 @@
-# Compiled binary
+# Local Claude Code config
+CLAUDE.md
+
+# Build output
 /sanitize
+
+# Go
+*.exe
+*.test
+*.out
+cover.out
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
