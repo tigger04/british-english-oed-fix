@@ -8,8 +8,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/tigger04/oed-sanitize/data"
-	"github.com/tigger04/oed-sanitize/pkg/spelling"
+	"github.com/tadg-paul/oed-sanitize/data"
+	"github.com/tadg-paul/oed-sanitize/pkg/spelling"
 )
 
 // version is set at build time via -ldflags.

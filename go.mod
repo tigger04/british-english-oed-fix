@@ -1,3 +1,3 @@
-module github.com/tigger04/oed-sanitize
+module github.com/tadg-paul/oed-sanitize
 
 go 1.25.0
